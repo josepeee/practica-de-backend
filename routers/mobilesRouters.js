@@ -1,58 +1,22 @@
 const { ReturnDocument } = require("mongodb");
-
 const  router = require("express").Router();
-
-let mobiles= [
-     {id:1, marca:"Apple", modelo:"phone14"},
-     {id:2, marca:"Apple", modelo:"phone 13"},
-     {id:3, marca:"samsung", modelo:"Galaxy S22"},
-];
+const {getALLMobiles, 
+    getMobileById, 
+    patchMobile,
+    createMobile,
+    deleteMobile
+} = require("../controllers/mobilesControles");
 
 //Escuchar peticiones GET..
-router.get("/", (req, res) => {
-    res.json(mobiles);
-});
-
+router.get("/", getALLMobiles);
 //Obtener documentos por ID
-router.get("/:id", (req, res)=> {
-    const mobileId = parseInt(req.params.id);
-    const mobile =mobiles.find((mobile) => mobile.id === mobileId);
-    res.json(mobile);
-});
-
+router.get("/:id" , getMobileById);
 //AÑADIR documentos
-router.post("/",(req, res)=> {
-    const { marca, modelo} = req.body;
-    const index = mobiles.length + 1;
-    mobiles.push({ index, marca, modelo });
-    res.json(mobiles);
-});
-
+router.post("/", createMobile)
 //Actualizar documentos 
-router.patch("/:id", (req, res)=>{
-    const mobileId = parseInt(req.params.id);
-    const { marca, modelo} = req.body;
-    const index = mobiles.findIndex((mobile) => mobile.id === mobileId);
-    if(index === -1) {
-        return res.json({ error: "No se encuentra el id"});
-    }
-    mobiles[index].marca = marca;
-    mobiles[index].modelo = modelo;
-    res.json(mobiles[index]);
-});
-
+router.patch("/:id", patchMobile)
 //Borrar un documento
-router.delete("/:id", (req, res) =>{
-    const mobileId = parseInt(req.params.id);
-    const index = mobiles.findIndex((mobile) => mobile.id === mobileId);
-    console.log(index);
-    if(index === -1) {
-        return res.json({ error: "No se encuentra el id"});
-    }
-    mobiles.splice(index,1);
-    return res.json(mobiles);
-});
-
+router.delete("/:id", deleteMobile);
 
 // //Escuchar peticiones GET....
 // router.get("/:idMobile", (req, res) => {
