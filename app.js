@@ -1,9 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const mobilesRouter = require("./routers/mobilesRouters");
+const { json } = require("body-parser");
 const PORT= 3000;
 require("dotenv").config();
 
 const app = express();
+app.use(express.json());
 
 
 const urlMongodb = process.env.DATABASE_URL_DEV;
@@ -24,13 +27,8 @@ db.on("disconecrted", () => {                 //esta todo el rato escuchando por
     console.log("Error al conectar");
 });
 
+app.use("/mobiles", mobilesRouter);
 
 app.listen(PORT, ()=> {
     console.log(`Server running in http://localhost:${PORT}`);
 });
-
-// app.get("/hola/:nombre", (req, res) =>{
-    //     const nombre = req.params.nombre;
-    //     res.setHeader("Content-type", "text/html; chartset=utf-8");
-    //     res.end(`<h2>Hola mundo de  ${nombre}</h2>`);
-    // });
