@@ -1,4 +1,5 @@
- const Mobile = require("../models/mobilesModel");
+ const { constants } = require("buffer");
+const Mobile = require("../models/mobilesModel");
 
 // obtener todos los moviles
 const getALLMobiles = async (req, res) =>{
@@ -157,7 +158,37 @@ const deleteMobile = async (req, res) => {
     }
 };
 
+const removeColor = async (req, res) => {
+    try {
+        const mobileId = req.params.id;
+        const  colorToRemove = req.body.color;
+        const mobile  = await Mobile.findById(mobileId);
+
+        if(!mobile){
+            return res.status(200).json({
+                status:"success",
+                message:"Producto no encontrado"
+            });
+          }
+        mobile.colores = mobile.colores.filter((color) => color !== colorToRemove);
+        const newMobile = await mobile.save();
+        
+        res.status(200).json({
+            status: "success",
+            message: "Color eliminado correctamente",
+            newMobile,
+        });
+    } catch (error) {
+        res.status(400).json({
+            status: "Error",
+            message: "Error al borrar el movil",
+            error: error.message,
+        });
+    }
+    
+};
 module.exports = {
+    removeColor,
     patch2Mobile,
     getALLMobiles, 
     getMobileById, 

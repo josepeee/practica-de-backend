@@ -1,6 +1,7 @@
 const { ReturnDocument } = require("mongodb");
 const  router = require("express").Router();
 const {getALLMobiles, 
+    removeColor,
     getMobileById, 
     patchMobile,
     patch2Mobile,
@@ -21,6 +22,8 @@ router.post("/",createMobile)
 router.patch("/:id", patchMobile)
 // /Actualizar documentos 
 router.patch("/:id/patch/:id", patch2Mobile)
+// / /Actualizar un color
+router.patch("/removeColor/:id", removeColor)
 //Borrar un documento
 router.delete("/:id", deleteMobile);
 

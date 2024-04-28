@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const mobilesRouter = require("./routers/mobilesRouters");
+const userRouter = require("./routers/userRouter")
 const { json } = require("body-parser");
 const PORT= 3000;
 require("dotenv").config();
@@ -28,6 +29,8 @@ db.on("disconecrted", () => {                 //esta todo el rato escuchando por
 });
 
 app.use("/mobiles", mobilesRouter);
+app.use("/user", userRouter)
+
 
 app.listen(PORT, ()=> {
     console.log(`Server running in http://localhost:${PORT}`);
