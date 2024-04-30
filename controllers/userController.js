@@ -1,7 +1,8 @@
 const User = require("../models/userModels");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { generateToken } = require("../utils/utils");
+const  generateToken= require("../utils/utils");
+const { error } = require("console");
 
 //creacion de Usuario de registro
 const addUser = async (req,res)=>{
@@ -45,15 +46,36 @@ const login = async (req, res) => {
             const validaPassword = await bcrypt.compare(password, user.password);
             if(validaPassword){
                 //TODO: GENERAR  TOKEN 
-                const payload = {
-                    userId: user._id,
-                    nombre: user.name,
-                    email: user.email,
-                };
-                const token = generateToken(payload, false);
-                const token_refresh = generateToken (payload, true);
+                const token = jwt.sign({
+                    userId:user._id,
+                    nombre:user.name,
+                    email:user.email,
+                    role: user.role,
+                },
+                process.env.TOKEN_SECRET, 
+                { expiresIn: "1min"}
+            );
 
-                return res.status(200).json({ status: "succeeded", data: user, token: token, token_refresh: token_refresh});
+            const token_refresh =jwt.sign({
+                 userId:user._id,
+                 nombre:user.name,
+                 email:user.email,
+                 role: user.role,
+
+            }, 
+            process.env.TOKEN_SECRET_REFRESH,
+            {expiresIn: "5min"}
+
+            );
+            // preguntar a ivan esto por que no me sale 
+            // const token = generateToken(payload, false);
+            // const token_refresh = generateToken(payload, true);
+
+                return res.status(200).json({ status: "succeeded",
+                 data: user,
+                  token: token,
+                 token_refresh: token_refresh,
+                });
             }else{
                 return res.status(200).json({
                     status: "Error",
@@ -75,4 +97,36 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { addUser, login};
+const refreshToken = (req,res) =>{
+    try {
+        const payload = req.payload;
+        if (!payload) return res.status(401).json({ error: "Acces denied" });
+        const user = 
+        {userId:payload.userId,
+          name: payload.name,
+          email:payload.email,
+          role: user.role,
+          
+        };
+        const token = generateToken(user, false);
+        const token_refresh = generateToken(user, true);
+
+        res.status(200).json({
+            status: "succeeded",
+            data: {
+                token,
+                token_refresh,
+            },
+        });
+
+    } catch (error) {
+        res.status(400).json({
+            status: "Error",
+            message: "Expired token",
+            error: error.message,
+        });
+    }
+};
+
+
+module.exports = { addUser, login, refreshToken };

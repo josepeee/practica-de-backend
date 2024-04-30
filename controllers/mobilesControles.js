@@ -3,6 +3,8 @@ const Mobile = require("../models/mobilesModel");
 
 // obtener todos los moviles
 const getALLMobiles = async (req, res) =>{
+
+   console.log(req.payload);
     try{
         const mobiles = await Mobile.find();
         if(mobiles.length === 0) {
