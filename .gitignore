@@ -3,3 +3,10 @@ env
 
 # const = mongodb+srv://joseantonioplaza777:<password>@cluster0.p6hhqv5.mongodb.net/
 # L8i9GOAOPiXmlxhP   joseantonioplaza777
+
+DATABASE_URL_DEV = mongodb+srv://joseantonioplaza777:L8i9GOAOPiXmlxhP@cluster0.p6hhqv5.mongodb.net/Tienda
+
+TOKEN_SECRET = e0e6080d33d59c5e83b6f9de6819b50c79908294a5ef5794014e42b5dd372089
+
+TOKEN_SECRET_REFRESH =163c032a6d3b89038d9b47f7d064535ebaa74e6a17f7277108598ece77b40381
+
