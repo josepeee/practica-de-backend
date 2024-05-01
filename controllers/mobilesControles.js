@@ -118,7 +118,7 @@ const createMobile = async (req, res) => {
         const { marca, modelo, precio, colores } = req.body;
         const mobile = new Mobile({ marca, modelo, precio, colores });
         await mobile.save(); // Esperar a que el móvil se guarde en la base de datos
-        res.status(200).json({
+        res.status(201).json({
             status: "success",
             data: mobile,
         });

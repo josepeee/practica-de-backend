@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 const mobilesRouter = require("./routers/mobilesRouters");
 const userRouter = require("./routers/userRouter")
 const PORT= 3000;
+
+
+const  swaggerUi = require('swageger-ui-express');
+const swaggerSpec = require("./swagger/swagger")
 require("dotenv").config();
 
 const app = express();
@@ -27,8 +31,9 @@ db.on("disconecrted", () => {                 //esta todo el rato escuchando por
     console.log("Error al conectar");
 });
 
-// app.use("/mobiles", mobilesRouter);
-// app.use("/user", userRouter)
+app.use("/mobiles", mobilesRouter);
+app.use("/user", userRouter)
+app.use("/apic-doc",swaggerUi.server, swaggerUi.setup(swaggerSpec));
 
 
 app.listen(PORT, ()=> {
